@@ -1,0 +1,38 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
+RewriteRule ^ /%1 [NC,L,R]
+
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^ %{REQUEST_URI}.php [NC,L]
+
+# Disable directory listing
+Options -Indexes
+
+# Deny access to .htaccess file itself
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Rule for notification
+RewriteRule ^notification/([^/]+)$ /app/controllers/set_notification.php?notification_id=$1 [L]
+
+# Rule for dashboard panel
+RewriteRule ^logbook/([^/]+)/dashboard/?$ /logbook/panel.php?unit=$1 [L]
+
+# Rule for login
+RewriteRule ^auth/login /login.php [L]
+
+# Rule for profile
+RewriteRule ^public/profile/([^/]+)$ /app/layout/profile.php?username=$1 [L]
+RewriteRule ^public/notifications/([^/]+)$ /app/layout/profile-notification.php?username=$1 [L]
+
+# Rule for approve
+RewriteRule ^logbook/([^/]+)/dashboard/approve/([^/]+)$ /logbook/approve.php?id=$2&unit=$1 [L]
+
+# Rule for edit logbook
+RewriteRule ^logbook/([^/]+)/dashboard/edit/([^/]+)$ /logbook/edit.php?id=$2&unit=$1 [L]
+
+# Rule for view logbook
+RewriteRule ^logbook/([^/]+)/dashboard/view/([^/]+)$ /logbook/view.php?id=$2&unit=$1 [L]
